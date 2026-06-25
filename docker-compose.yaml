@@ -1,0 +1,5 @@
+services:
+  api_gateway:
+    build:
+      dockerfile: './apps/apiGateway/Dockerfile'
+      context: '.'
