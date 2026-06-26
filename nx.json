@@ -53,7 +53,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/apiGateway-e2e/**/*"]
+      "exclude": ["apps/apiGateway-e2e/**/*", "apps/authMicroservice-e2e/**/*"]
     },
     {
       "plugin": "@nx/docker",

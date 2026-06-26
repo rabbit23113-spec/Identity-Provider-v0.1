@@ -1,5 +1,5 @@
 {
-  "name": "@identityprovider/apiGateway",
+  "name": "@identityprovider/authMicroservice",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -11,7 +11,7 @@
           "env": {
             "NODE_ENV": "production"
           },
-          "cwd": "apps/apiGateway"
+          "cwd": "apps/authMicroservice"
         },
         "configurations": {
           "development": {
@@ -28,8 +28,8 @@
         "cache": true,
         "executor": "@nx/js:prune-lockfile",
         "outputs": [
-          "{workspaceRoot}/apps/apiGateway/dist/package.json",
-          "{workspaceRoot}/apps/apiGateway/dist/package-lock.json"
+          "{workspaceRoot}/apps/authMicroservice/dist/package.json",
+          "{workspaceRoot}/apps/authMicroservice/dist/package-lock.json"
         ],
         "options": {
           "buildTarget": "build"
@@ -41,7 +41,7 @@
         ],
         "cache": true,
         "outputs": [
-          "{workspaceRoot}/apps/apiGateway/dist/workspace_modules"
+          "{workspaceRoot}/apps/authMicroservice/dist/workspace_modules"
         ],
         "executor": "@nx/js:copy-workspace-modules",
         "options": {
@@ -63,15 +63,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@identityprovider/apiGateway:build",
+          "buildTarget": "@identityprovider/authMicroservice:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@identityprovider/apiGateway:build:development"
+            "buildTarget": "@identityprovider/authMicroservice:build:development"
           },
           "production": {
-            "buildTarget": "@identityprovider/apiGateway:build:production"
+            "buildTarget": "@identityprovider/authMicroservice:build:production"
           }
         }
       },
@@ -79,12 +79,6 @@
         "options": {
           "passWithNoTests": true
         }
-      },
-      "docker:build": {
-        "dependsOn": [
-          "build",
-          "prune"
-        ]
       }
     }
   },
@@ -93,6 +87,7 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/microservices": "^11.1.27",
     "@nestjs/platform-express": "^11.0.0",
+    "kafkajs": "^2.2.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0"

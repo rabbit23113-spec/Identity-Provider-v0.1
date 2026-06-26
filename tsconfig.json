@@ -8,6 +8,12 @@
     },
     {
       "path": "./apps/apiGateway"
+    },
+    {
+      "path": "./apps/authMicroservice-e2e"
+    },
+    {
+      "path": "./apps/authMicroservice"
     }
   ]
 }

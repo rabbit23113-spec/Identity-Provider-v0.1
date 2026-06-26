@@ -1,0 +1,26 @@
+{
+  "name": "@identityprovider/authMicroservice-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@identityprovider/authMicroservice"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "dependsOn": [
+          "@identityprovider/authMicroservice:build",
+          "@identityprovider/authMicroservice:serve"
+        ],
+        "options": {
+          "jestConfig": "apps/authMicroservice-e2e/jest.config.cts",
+          "passWithNoTests": true
+        }
+      }
+    }
+  }
+}
