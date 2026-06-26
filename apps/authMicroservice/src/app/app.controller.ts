@@ -1,7 +1,11 @@
 import { Controller } from '@nestjs/common';
-import { AppService } from './app.service';
+import { CommandsService } from './commands/app.commands';
+import { QueriesService } from './queries/app.queries';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly commandsService: CommandsService,
+    private readonly queriesService: QueriesService,
+  ) {}
 }
