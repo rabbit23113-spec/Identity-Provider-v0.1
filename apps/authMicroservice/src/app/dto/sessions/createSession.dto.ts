@@ -1,4 +1,4 @@
 export class CreateSessionDto {
-  refreshTokenHash: string;
-  expiresAt: Date;
+  email: string;
+  password: string;
 }

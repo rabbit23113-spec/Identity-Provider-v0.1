@@ -8,6 +8,7 @@ import { OutboxRepository } from './entities/outbox.repository';
 import { SessionRepository } from './entities/session.repository';
 import { UserRepository } from './entities/user.repository';
 import { Queries } from './queries/app.queries';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -34,6 +35,12 @@ import { Queries } from './queries/app.queries';
       SessionRepository,
       UserRepository,
     ]),
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: {
+        expiresIn: '5m',
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [Commands, Queries],
