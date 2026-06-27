@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Commands } from './commands/app.commands';
-import { AuthCodeRepository } from './entities/authCode.repository';
-import { OauthRepository } from './entities/oauth.repository';
-import { OutboxRepository } from './entities/outbox.repository';
-import { SessionRepository } from './entities/session.repository';
-import { UserRepository } from './entities/user.repository';
+import { AuthCodeRepository } from './repositories/authCode.repository';
+import { OauthRepository } from './repositories/oauth.repository';
+import { OutboxRepository } from './repositories/outbox.repository';
+import { SessionRepository } from './repositories/session.repository';
+import { UserRepository } from './repositories/user.repository';
 import { Queries } from './queries/app.queries';
 import { JwtModule } from '@nestjs/jwt';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -41,6 +42,19 @@ import { JwtModule } from '@nestjs/jwt';
         expiresIn: '5m',
       },
     }),
+    ClientsModule.register([
+      {
+        name: 'AUTH_KAFKA',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'AUTH_SERVICE_CLIENT',
+            brokers: ['kafka:9092'],
+          },
+          producerOnlyMode: true,
+        },
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [Commands, Queries],

@@ -16,7 +16,7 @@ async function bootstrap() {
       options: {
         client: {
           brokers: ['kafka:9092'],
-          clientId: 'auth-service',
+          clientId: 'AUTH_SERVICE_CLIENT',
         },
         consumer: {
           groupId: 'auth-consumer-group',

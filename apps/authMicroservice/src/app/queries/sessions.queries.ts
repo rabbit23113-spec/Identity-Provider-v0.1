@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { SessionRepository } from '../entities/session.repository';
+import { SessionRepository } from '../repositories/session.repository';
 import { Repository } from 'typeorm';
 
 @Injectable()

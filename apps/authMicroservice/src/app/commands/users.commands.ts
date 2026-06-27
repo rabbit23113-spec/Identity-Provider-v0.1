@@ -1,12 +1,12 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { UserRepository } from '../entities/user.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/users/createUser.dto';
 import {
   OutboxAction,
   OutboxDomain,
   OutboxRepository,
-} from '../entities/outbox.repository';
+} from '../repositories/outbox.repository';
 
 @Injectable()
 export class UsersCommands {

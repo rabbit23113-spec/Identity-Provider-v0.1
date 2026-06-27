@@ -1,4 +1,4 @@
-import { UserStatus } from '../../entities/user.repository';
+import { UserStatus } from '../../repositories/user.repository';
 
 export class CreateUserDto {
   email: string;

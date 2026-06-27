@@ -7,6 +7,7 @@ import {
 
 export enum OutboxStatus {
   PENDING = 'pending',
+  PROCESSING = 'processing',
   SENT = 'sent',
 }
 

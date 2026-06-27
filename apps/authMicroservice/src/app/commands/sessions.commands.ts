@@ -6,18 +6,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { SessionRepository } from '../entities/session.repository';
+import { SessionRepository } from '../repositories/session.repository';
 import { CreateSessionDto } from '../dto/sessions/createSession.dto';
 import { TokensDto } from '../dto/sessions/tokens.dto';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { UsersCommands } from './users.commands';
 import { randomBytes } from 'node:crypto';
-import { OutboxRepository } from '../entities/outbox.repository';
+import { OutboxRepository } from '../repositories/outbox.repository';
 import { UsersQueries } from '../queries/users.queries';
 import { RotateSessionDto } from '../dto/sessions/rotateSession.dto';
 import { SessionsQueries } from '../queries/sessions.queries';
-import { UserRepository } from '../entities/user.repository';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class SessionsCommands {
