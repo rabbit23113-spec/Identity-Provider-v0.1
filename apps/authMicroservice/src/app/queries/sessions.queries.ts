@@ -8,10 +8,6 @@ export class SessionsQueries {
     private readonly sessionRepository: Repository<SessionRepository>,
   ) {}
 
-  async findAll(): Promise<SessionRepository[]> {
-    return this.sessionRepository.find();
-  }
-
   async findOne(sessionId: string): Promise<SessionRepository> {
     const target: SessionRepository | null =
       await this.sessionRepository.findOneBy({ sessionId });
