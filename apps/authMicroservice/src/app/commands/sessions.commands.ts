@@ -17,6 +17,7 @@ import { OutboxRepository } from '../entities/outbox.repository';
 import { UsersQueries } from '../queries/users.queries';
 import { RotateSessionDto } from '../dto/sessions/rotateSession.dto';
 import { SessionsQueries } from '../queries/sessions.queries';
+import { UserRepository } from '../entities/user.repository';
 
 @Injectable()
 export class SessionsCommands {
@@ -31,20 +32,22 @@ export class SessionsCommands {
 
   async createSession(): Promise<TokensDto> {
     const salt = 14;
-    const refreshToken = randomBytes(32).toString('base64url');
-    const refreshTokenHash = await bcrypt.hash(refreshToken, salt);
-    const expiresAt = new Date(Date.now() / 1000 + 60 * 5);
-    const session = this.sessionRepository.create({
+    const refreshToken: string = randomBytes(32).toString('base64url');
+    const refreshTokenHash: string = await bcrypt.hash(refreshToken, salt);
+    const expiresAt: Date = new Date(Date.now() / 1000 + 60 * 5);
+    const session: SessionRepository = this.sessionRepository.create({
       refreshTokenHash,
       expiresAt,
     });
     await this.sessionRepository.save(session);
-    const event = this.outboxRepository.create({
+    const event: OutboxRepository = this.outboxRepository.create({
       eventType: 'session.created',
       payload: session,
     });
     await this.outboxRepository.save(event);
-    const accessToken = await this.jwtService.signAsync(session.sessionId);
+    const accessToken: string = await this.jwtService.signAsync(
+      session.sessionId,
+    );
     return {
       refreshToken,
       accessToken,
@@ -55,7 +58,7 @@ export class SessionsCommands {
     try {
       const { email, password } = dto;
       const salt = 14;
-      const passwordHash = await bcrypt.hash(password, salt);
+      const passwordHash: string = await bcrypt.hash(password, salt);
       await this.usersCommands.createOne({ email, passwordHash });
       return this.createSession();
     } catch (error) {
@@ -65,11 +68,11 @@ export class SessionsCommands {
 
   async login(dto: CreateSessionDto): Promise<TokensDto> {
     const { email, password } = dto;
-    const user = await this.usersQueries.findOneByEmail(email);
+    const user: UserRepository = await this.usersQueries.findOneByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    const isMatch: boolean = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -77,7 +80,8 @@ export class SessionsCommands {
   }
 
   async revoke(sessionId: string): Promise<void> {
-    const session = await this.sessionsQueries.findOne(sessionId);
+    const session: SessionRepository =
+      await this.sessionsQueries.findOne(sessionId);
     if (!session) {
       throw new NotFoundException('Invalid session');
     }
@@ -89,7 +93,8 @@ export class SessionsCommands {
 
   async rotate(dto: RotateSessionDto): Promise<TokensDto> {
     const { sessionId, refreshToken } = dto;
-    const session = await this.sessionsQueries.findOne(sessionId);
+    const session: SessionRepository =
+      await this.sessionsQueries.findOne(sessionId);
     if (!session) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -101,11 +106,17 @@ export class SessionsCommands {
       throw new UnauthorizedException('Invalid credentials');
     }
     const { refreshTokenHash } = session;
-    const isMatch = await bcrypt.compare(refreshToken, refreshTokenHash);
+    const isMatch: boolean = await bcrypt.compare(
+      refreshToken,
+      refreshTokenHash,
+    );
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    await this.sessionRepository.update({ sessionId }, { rotatedAt: new Date() })
+    await this.sessionRepository.update(
+      { sessionId },
+      { rotatedAt: new Date() },
+    );
     return await this.createSession();
   }
 }

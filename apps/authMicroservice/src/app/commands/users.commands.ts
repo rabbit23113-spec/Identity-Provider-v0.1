@@ -15,7 +15,7 @@ export class UsersCommands {
     try {
       const user: UserRepository = this.userRepository.create(dto);
       await this.userRepository.save(user);
-      const event = this.outboxRepository.create({
+      const event: OutboxRepository = this.outboxRepository.create({
         eventType: 'users.created',
         payload: user,
       });

@@ -10,7 +10,7 @@ export class UsersQueries {
   constructor(private readonly userRepository: Repository<UserRepository>) {}
 
   async findOne(userId: string): Promise<UserRepository> {
-    const target = await this.userRepository.findOneBy({ userId });
+    const target: UserRepository | null = await this.userRepository.findOneBy({ userId });
     if (!target) {
       throw new NotFoundException(`User with id ${userId} not found`);
     }
@@ -18,7 +18,7 @@ export class UsersQueries {
   }
 
   async findOneByEmail(email: string): Promise<UserRepository> {
-    const target = await this.userRepository.findOneBy({ email });
+    const target: UserRepository | null = await this.userRepository.findOneBy({ email });
     if (!target) {
       throw new NotFoundException(`User with email ${email} not found`);
     }
