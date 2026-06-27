@@ -2,7 +2,11 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../entities/user.repository';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/users/createUser.dto';
-import { OutboxRepository } from '../entities/outbox.repository';
+import {
+  OutboxAction,
+  OutboxDomain,
+  OutboxRepository,
+} from '../entities/outbox.repository';
 
 @Injectable()
 export class UsersCommands {
@@ -16,7 +20,8 @@ export class UsersCommands {
       const user: UserRepository = this.userRepository.create(dto);
       await this.userRepository.save(user);
       const event: OutboxRepository = this.outboxRepository.create({
-        eventType: 'users.created',
+        domain: OutboxDomain.USER,
+        action: OutboxAction.CREATE,
         payload: user,
       });
       await this.outboxRepository.save(event);

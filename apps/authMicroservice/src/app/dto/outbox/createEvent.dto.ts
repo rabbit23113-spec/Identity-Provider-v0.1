@@ -1,4 +1,7 @@
+import { OutboxAction, OutboxDomain } from '../../entities/outbox.repository';
+
 export class CreateEventDto {
-  eventType: string;
+  domain: OutboxDomain;
+  action: OutboxAction;
   payload: Record<string, any>;
 }
