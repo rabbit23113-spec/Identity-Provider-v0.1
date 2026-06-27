@@ -7,7 +7,7 @@ import { UsersQueries } from './users.queries';
 export class Queries {
   constructor(
     public readonly oauth: OauthQueries,
-    public readonly sessionsQueries: SessionsQueries,
-    public readonly usersQueries: UsersQueries,
+    public readonly sessions: SessionsQueries,
+    public readonly users: UsersQueries,
   ) {}
 }

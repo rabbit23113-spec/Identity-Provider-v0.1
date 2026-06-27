@@ -14,7 +14,7 @@ export class AppController {
 
   @MessagePattern({ cmd: 'auth.findOne' })
   async findSessionBySessionId(@Payload() payload: { sessionId: string }) {
-    return await this.queries.sessionsQueries.findOne(payload.sessionId);
+    return await this.queries.sessions.findOne(payload.sessionId);
   }
 
   @MessagePattern({ cmd: 'auth.register' })
