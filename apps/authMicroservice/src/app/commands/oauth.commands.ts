@@ -48,7 +48,7 @@ export class OauthCommands {
     return url.toString();
   }
 
-  async setOauthState(oauthClientId: string, redirectUri: string) {
+  private async setOauthState(oauthClientId: string, redirectUri: string) {
     const state: string = randomBytes(32).toString('base64url');
     await this.redis.set(
       state,
@@ -81,14 +81,14 @@ export class OauthCommands {
     return url.toString();
   }
 
-  async findOrCreateUser(email: string): Promise<UserRepository> {
+  private async findOrCreateUser(email: string): Promise<UserRepository> {
     const existedUser: UserRepository | null =
       await this.usersQueries.findOneByEmail(email);
     if (existedUser) return existedUser;
     return await this.usersCommands.createOne({ email });
   }
 
-  async exchangeCode(code: string) {
+  private async exchangeCode(code: string) {
     const res = await axios.post(
       'https://oauth2.googleapis.com/token',
       new URLSearchParams({
