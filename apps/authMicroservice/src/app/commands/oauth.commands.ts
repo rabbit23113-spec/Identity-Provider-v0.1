@@ -10,13 +10,20 @@ import { UsersCommands } from './users.commands';
 import { UsersQueries } from '../queries/users.queries';
 import { UserRepository } from '../repositories/user.repository';
 import { SessionsCommands } from './sessions.commands';
-import {OutboxRepository} from "../repositories/outbox.repository";
+import {
+  OutboxAction,
+  OutboxDomain,
+  OutboxRepository,
+} from '../repositories/outbox.repository';
+import { AuthCodeRepository } from '../repositories/authCode.repository';
+import { CreateClientDto } from '../dto/oauth/createClient.dto';
 
 @Injectable()
 export class OauthCommands {
   constructor(
     private readonly oauthRepository: Repository<OauthRepository>,
     private readonly outboxRepository: Repository<OutboxRepository>,
+    private readonly authCodeRepository: Repository<AuthCodeRepository>,
     @Inject(UsersCommands) private readonly usersCommands: UsersCommands,
     @Inject(UsersQueries) private readonly usersQueries: UsersQueries,
     @Inject(SessionsCommands)
@@ -74,11 +81,41 @@ export class OauthCommands {
 
     await this.findOrCreateUser(userInfo.email);
     const tokens: TokensDto = await this.sessionsCommands.createSession();
+
+    const authCode = this.authCodeRepository.create({
+      code,
+      redirectUri: stateData.redirectUri,
+      oauthClientId: stateData.clientId,
+      expiresAt: Math.floor(Date.now() / 1000 + 60 * 10),
+    });
+    await this.authCodeRepository.save(authCode);
+
+    const event = this.outboxRepository.create({
+      domain: OutboxDomain.AUTH_CODE,
+      action: OutboxAction.CREATE,
+      payload: authCode,
+    });
+    await this.outboxRepository.save(event);
+
     const url = new URL(stateData.redirectUri);
     url.searchParams.set('access_token', tokens.accessToken);
     url.searchParams.set('refresh_token', tokens.refreshToken);
 
     return url.toString();
+  }
+
+  async createOauthClient(dto: CreateClientDto): Promise<OauthRepository> {
+    const oauthClient: OauthRepository = this.oauthRepository.create(dto);
+    await this.oauthRepository.save(oauthClient);
+
+    const event = this.outboxRepository.create({
+      domain: OutboxDomain.OAUTH,
+      action: OutboxAction.CREATE,
+      payload: oauthClient,
+    });
+    await this.outboxRepository.save(event);
+
+    return oauthClient;
   }
 
   private async findOrCreateUser(email: string): Promise<UserRepository> {

@@ -13,7 +13,11 @@ import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { UsersCommands } from './users.commands';
 import { randomBytes } from 'node:crypto';
-import { OutboxRepository } from '../repositories/outbox.repository';
+import {
+  OutboxAction,
+  OutboxDomain,
+  OutboxRepository,
+} from '../repositories/outbox.repository';
 import { UsersQueries } from '../queries/users.queries';
 import { RotateSessionDto } from '../dto/sessions/rotateSession.dto';
 import { SessionsQueries } from '../queries/sessions.queries';
@@ -41,7 +45,8 @@ export class SessionsCommands {
     });
     await this.sessionRepository.save(session);
     const event: OutboxRepository = this.outboxRepository.create({
-      eventType: 'session.created',
+      domain: OutboxDomain.SESSION,
+      action: OutboxAction.CREATE,
       payload: session,
     });
     await this.outboxRepository.save(event);
