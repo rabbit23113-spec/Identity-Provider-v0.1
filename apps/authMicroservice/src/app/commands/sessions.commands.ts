@@ -94,6 +94,12 @@ export class SessionsCommands {
       { sessionId },
       { revokedAt: new Date() },
     );
+    const event: OutboxRepository = this.outboxRepository.create({
+      domain: OutboxDomain.SESSION,
+      action: OutboxAction.REVOKE,
+      payload: session,
+    });
+    await this.outboxRepository.save(event);
   }
 
   async rotate(dto: RotateSessionDto): Promise<TokensDto> {
@@ -122,6 +128,12 @@ export class SessionsCommands {
       { sessionId },
       { rotatedAt: new Date() },
     );
+    const event: OutboxRepository = this.outboxRepository.create({
+      domain: OutboxDomain.SESSION,
+      action: OutboxAction.ROTATE,
+      payload: session,
+    });
+    await this.outboxRepository.save(event);
     return await this.createSession();
   }
 }
