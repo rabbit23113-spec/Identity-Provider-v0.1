@@ -10,6 +10,7 @@ import { UserRepository } from './repositories/user.repository';
 import { Queries } from './queries/app.queries';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { constants } from './constants/app.constants';
 
 @Module({
   imports: [
@@ -17,8 +18,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'root',
-      password: 'root',
+      username: constants.POSTGRES_USER,
+      password: constants.POSTGRES_PASSWORD,
+      database: constants.POSTGRES_DB,
       synchronize: true,
       autoLoadEntities: true,
       entities: [
@@ -37,18 +39,18 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       UserRepository,
     ]),
     JwtModule.register({
-      secret: 'secret',
+      secret: constants.JWT_SECRET,
       signOptions: {
         expiresIn: '5m',
       },
     }),
     ClientsModule.register([
       {
-        name: 'AUTH_KAFKA',
+        name: constants.KAFKA_CLIENT,
         transport: Transport.KAFKA,
         options: {
           client: {
-            clientId: 'AUTH_SERVICE_CLIENT',
+            clientId: constants.KAFKA_CLIENT_ID,
             brokers: ['kafka:9092'],
           },
           producerOnlyMode: true,
