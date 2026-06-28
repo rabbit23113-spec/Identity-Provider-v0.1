@@ -11,11 +11,9 @@ export class OauthRepository {
   id: string;
 
   @Column({
-    name: 'oauth_client_id',
-    type: 'uuid',
-    default: () => 'gen_random_uuid()',
+    name: 'client_id',
   })
-  oauthClientId: string;
+  clientId: string;
 
   @Column({ name: 'client_secret_hash' })
   clientSecretHash: string;
