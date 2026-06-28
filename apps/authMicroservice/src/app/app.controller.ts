@@ -36,4 +36,16 @@ export class AppController {
   async revoke(@Payload() payload: { sessionId: string }) {
     return await this.commands.sessions.revoke(payload.sessionId);
   }
+
+  @MessagePattern({ cmd: 'oauth.genUrl' })
+  async genUrl(@Payload() payload: { clientId: string; redirectUri: string }) {
+    const { clientId, redirectUri } = payload;
+    return await this.commands.oauth.oauthGenUrl(clientId, redirectUri);
+  }
+
+  @MessagePattern({ cmd: 'oauth.callback' })
+  async handleCallback(@Payload() payload: { code: string; state: string }) {
+    const { code, state } = payload;
+    return await this.commands.oauth.handleCallback(code, state);
+  }
 }

@@ -11,6 +11,7 @@ import { Queries } from './queries/app.queries';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { constants } from './constants/app.constants';
+import { RedisProvider } from './utils/redisProvider/redis.provider';
 
 @Module({
   imports: [
@@ -59,6 +60,6 @@ import { constants } from './constants/app.constants';
     ]),
   ],
   controllers: [AppController],
-  providers: [Commands, Queries],
+  providers: [Commands, Queries, RedisProvider],
 })
 export class AppModule {}

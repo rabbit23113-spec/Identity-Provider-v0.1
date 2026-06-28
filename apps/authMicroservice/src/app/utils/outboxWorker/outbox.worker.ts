@@ -7,9 +7,10 @@ import {
 import {
   OutboxRepository,
   OutboxStatus,
-} from '../repositories/outbox.repository';
+} from '../../repositories/outbox.repository';
 import { Repository } from 'typeorm';
 import { ClientKafka } from '@nestjs/microservices';
+import { constants } from '../../constants/app.constants';
 
 @Injectable()
 export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
@@ -17,7 +18,7 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     private outboxRepository: Repository<OutboxRepository>,
-    @Inject('AUTH_KAFKA') private readonly clientKafka: ClientKafka,
+    @Inject(constants.KAFKA_CLIENT) private readonly clientKafka: ClientKafka,
   ) {}
 
   async onModuleInit() {

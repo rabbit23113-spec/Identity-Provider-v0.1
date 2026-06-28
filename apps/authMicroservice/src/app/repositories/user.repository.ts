@@ -23,7 +23,7 @@ export class UserRepository {
   @Column({ unique: true })
   email: string;
 
-  @Column({ name: 'password_hash' })
+  @Column({ name: 'password_hash', nullable: true })
   passwordHash: string;
 
   @Column({ type: 'simple-enum', enum: UserStatus, default: UserStatus.PENDING })
