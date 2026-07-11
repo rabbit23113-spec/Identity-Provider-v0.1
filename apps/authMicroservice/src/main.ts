@@ -7,6 +7,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { constants } from './app/constants/app.constants';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -16,7 +17,7 @@ async function bootstrap() {
       options: {
         client: {
           brokers: ['kafka:9092'],
-          clientId: 'AUTH_SERVICE_CLIENT',
+          clientId: constants.KAFKA_CLIENT_ID,
         },
         consumer: {
           groupId: 'auth-consumer-group',

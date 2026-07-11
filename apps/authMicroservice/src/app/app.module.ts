@@ -68,6 +68,8 @@ import { SessionsQueries } from './queries/sessions.queries';
   controllers: [AppController],
   providers: [
     RedisProvider,
+    Commands,
+    Queries,
     UsersCommands,
     OauthCommands,
     SessionsCommands,

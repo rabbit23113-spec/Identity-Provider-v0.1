@@ -7,9 +7,23 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Transport } from '@nestjs/microservices';
+import { constants } from './app/constants/app.constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.connectMicroservice({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'AUTH_SERVICE_CLIENT',
+        brokers: ['kafka:9092'],
+      },
+      consumer: {
+        groupId: 'auth',
+      },
+    },
+  });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()

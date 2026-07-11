@@ -22,6 +22,7 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   async onModuleInit() {
+    await this.clientKafka.connect();
     this.running = true;
     await this.checkForEvents();
   }
@@ -70,8 +71,9 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
 
       for (const event of events) {
         try {
-          this.clientKafka.send(
-            `${event.domain}:${event.action}`,
+          if (!event.domain || !event.action) continue;
+          this.clientKafka.emit(
+            `${event.domain}.${event.action}`,
             event.payload,
           );
 

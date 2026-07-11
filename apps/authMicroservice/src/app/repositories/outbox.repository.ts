@@ -49,7 +49,7 @@ export class OutboxRepository {
   @Column({ type: 'jsonb' })
   payload: Record<string, any>;
 
-  @Column({ name: 'processed_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'processed_at', type: 'timestamp', nullable: true })
   processedAt: Date;
 
   @CreateDateColumn({ name: 'created_at' })
