@@ -3,6 +3,7 @@ services:
     build:
       dockerfile: './apps/apiGateway/Dockerfile'
       context: '.'
+    ports: ['12050:3000']
   auth_microservice:
     build:
       dockerfile: './apps/authMicroservice/Dockerfile'

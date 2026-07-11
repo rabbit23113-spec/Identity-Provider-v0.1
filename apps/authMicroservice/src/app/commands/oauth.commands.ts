@@ -17,13 +17,14 @@ import {
 } from '../repositories/outbox.repository';
 import { AuthCodeRepository } from '../repositories/authCode.repository';
 import { CreateClientDto } from '../dto/oauth/createClient.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class OauthCommands {
   constructor(
-    private readonly oauthRepository: Repository<OauthRepository>,
-    private readonly outboxRepository: Repository<OutboxRepository>,
-    private readonly authCodeRepository: Repository<AuthCodeRepository>,
+    @InjectRepository(OauthRepository) private readonly oauthRepository: Repository<OauthRepository>,
+    @InjectRepository(OutboxRepository) private readonly outboxRepository: Repository<OutboxRepository>,
+    @InjectRepository(AuthCodeRepository) private readonly authCodeRepository: Repository<AuthCodeRepository>,
     @Inject(UsersCommands) private readonly usersCommands: UsersCommands,
     @Inject(UsersQueries) private readonly usersQueries: UsersQueries,
     @Inject(SessionsCommands)

@@ -4,10 +4,11 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersQueries {
-  constructor(private readonly userRepository: Repository<UserRepository>) {}
+  constructor(@InjectRepository(UserRepository) private readonly userRepository: Repository<UserRepository>) {}
 
   async findOne(userId: string): Promise<UserRepository> {
     const target: UserRepository | null = await this.userRepository.findOneBy({ userId });

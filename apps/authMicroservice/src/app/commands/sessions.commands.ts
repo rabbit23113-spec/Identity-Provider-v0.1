@@ -22,12 +22,13 @@ import { UsersQueries } from '../queries/users.queries';
 import { RotateSessionDto } from '../dto/sessions/rotateSession.dto';
 import { SessionsQueries } from '../queries/sessions.queries';
 import { UserRepository } from '../repositories/user.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class SessionsCommands {
   constructor(
-    private readonly sessionRepository: Repository<SessionRepository>,
-    private readonly outboxRepository: Repository<OutboxRepository>,
+    @InjectRepository(SessionRepository) private readonly sessionRepository: Repository<SessionRepository>,
+    @InjectRepository(OutboxRepository) private readonly outboxRepository: Repository<OutboxRepository>,
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(UsersCommands) private readonly usersCommands: UsersCommands,
     @Inject(UsersCommands) private readonly usersQueries: UsersQueries,

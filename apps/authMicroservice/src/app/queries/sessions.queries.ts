@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SessionRepository } from '../repositories/session.repository';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class SessionsQueries {
   constructor(
-    private readonly sessionRepository: Repository<SessionRepository>,
+    @InjectRepository(SessionRepository) private readonly sessionRepository: Repository<SessionRepository>,
   ) {}
 
   async findOne(sessionId: string): Promise<SessionRepository> {

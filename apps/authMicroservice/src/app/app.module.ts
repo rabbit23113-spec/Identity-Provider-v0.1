@@ -12,6 +12,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { constants } from './constants/app.constants';
 import { RedisProvider } from './utils/redisProvider/redis.provider';
+import { UsersCommands } from './commands/users.commands';
+import { OauthCommands } from './commands/oauth.commands';
+import { SessionsCommands } from './commands/sessions.commands';
+import { UsersQueries } from './queries/users.queries';
+import { OauthQueries } from './queries/oauth.queries';
+import { SessionsQueries } from './queries/sessions.queries';
 
 @Module({
   imports: [
@@ -35,7 +41,7 @@ import { RedisProvider } from './utils/redisProvider/redis.provider';
     TypeOrmModule.forFeature([
       AuthCodeRepository,
       OutboxRepository,
-      OutboxRepository,
+      OauthRepository,
       SessionRepository,
       UserRepository,
     ]),
@@ -60,6 +66,14 @@ import { RedisProvider } from './utils/redisProvider/redis.provider';
     ]),
   ],
   controllers: [AppController],
-  providers: [Commands, Queries, RedisProvider],
+  providers: [
+    RedisProvider,
+    UsersCommands,
+    OauthCommands,
+    SessionsCommands,
+    UsersQueries,
+    OauthQueries,
+    SessionsQueries,
+  ],
 })
 export class AppModule {}

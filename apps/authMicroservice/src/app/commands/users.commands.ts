@@ -1,4 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/users/createUser.dto';
@@ -7,11 +10,14 @@ import {
   OutboxDomain,
   OutboxRepository,
 } from '../repositories/outbox.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersCommands {
   constructor(
+    @InjectRepository(UserRepository)
     private readonly userRepository: Repository<UserRepository>,
+    @InjectRepository(OutboxRepository)
     private readonly outboxRepository: Repository<OutboxRepository>,
   ) {}
 
