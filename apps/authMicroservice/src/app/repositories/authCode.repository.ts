@@ -17,10 +17,10 @@ export class AuthCodeRepository {
   @Column({ name: "redirect_uri" })
   redirectUri: string;
 
-  @Column({ name: "expires_at", type: "datetime" })
+  @Column({ name: "expires_at", type: "timestamptz" })
   expiresAt: Date;
 
-  @Column({ name: "used_at", type: "datetime", default: Date.now() })
+  @Column({ name: "used_at", type: "timestamptz", default: Date.now() })
   used_at: Date;
 
   @CreateDateColumn({ name: "created_at" })

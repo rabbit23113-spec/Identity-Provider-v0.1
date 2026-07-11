@@ -23,7 +23,7 @@ import { SessionsQueries } from './queries/sessions.queries';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: constants.POSTGRES_HOST,
       port: 5432,
       username: constants.POSTGRES_USER,
       password: constants.POSTGRES_PASSWORD,

@@ -8,6 +8,18 @@ services:
     build:
       dockerfile: './apps/authMicroservice/Dockerfile'
       context: '.'
+  auth_database:
+    image: postgres:17
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: auth
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   kafka:
     image: apache/kafka:latest
     ports:
@@ -23,3 +35,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+volumes:
+  postgres_data:

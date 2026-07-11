@@ -35,3 +35,4 @@ export class UserRepository {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
+``

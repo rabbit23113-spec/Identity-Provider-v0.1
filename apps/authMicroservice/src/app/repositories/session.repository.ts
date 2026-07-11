@@ -15,13 +15,13 @@ export class SessionRepository {
   @Column({ name: "refresh_token_hash" })
   refreshTokenHash: string;
 
-  @Column({ name: "expires_at", type: "datetime" })
+  @Column({ name: "expires_at", type: "timestamptz" })
   expiresAt: Date;
 
-  @Column({ name: "revoked_at", type: "datetime", nullable: true })
+  @Column({ name: "revoked_at", type: "timestamptz", nullable: true })
   revokedAt: Date;
 
-  @Column({ name: "rotated_at", type: "datetime", nullable: true })
+  @Column({ name: "rotated_at", type: "timestamptz", nullable: true })
   rotatedAt: Date;
 
   @CreateDateColumn({ name: "created_at" })
