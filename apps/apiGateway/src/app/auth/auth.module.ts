@@ -16,7 +16,7 @@ import { constants } from '../constants/app.constants';
             brokers: ['kafka:9092'],
           },
           consumer: {
-            groupId: 'auth-consumer-group',
+            groupId: 'api-gateway-group',
           },
         },
       },
