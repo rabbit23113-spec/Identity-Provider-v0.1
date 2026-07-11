@@ -3,6 +3,10 @@ services:
     build:
       dockerfile: './apps/apiGateway/Dockerfile'
       context: '.'
+  auth_microservice:
+    build:
+      dockerfile: './apps/authMicroservice/Dockerfile'
+      context: '.'
   kafka:
     image: apache/kafka:latest
     ports:
