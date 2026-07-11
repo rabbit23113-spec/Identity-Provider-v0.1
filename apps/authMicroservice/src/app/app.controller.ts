@@ -12,38 +12,38 @@ export class AppController {
     private readonly queries: Queries,
   ) {}
 
-  @MessagePattern({ cmd: 'auth.findOne' })
+  @MessagePattern('auth.findOne')
   async findSessionBySessionId(@Payload() payload: { sessionId: string }) {
     return await this.queries.sessions.findOne(payload.sessionId);
   }
 
-  @MessagePattern({ cmd: 'auth.register' })
+  @MessagePattern('auth.register')
   async register(@Payload() payload: { dto: CreateSessionDto }) {
     return await this.commands.sessions.register(payload.dto);
   }
 
-  @MessagePattern({ cmd: 'auth.login' })
+  @MessagePattern('auth.login')
   async login(@Payload() payload: { dto: CreateSessionDto }) {
     return await this.commands.sessions.login(payload.dto);
   }
 
-  @MessagePattern({ cmd: 'auth.rotate' })
+  @MessagePattern('auth.rotate')
   async rotate(@Payload() payload: { dto: RotateSessionDto }) {
     return await this.commands.sessions.rotate(payload.dto);
   }
 
-  @MessagePattern({ cmd: 'auth.revoke' })
+  @MessagePattern('auth.revoke')
   async revoke(@Payload() payload: { sessionId: string }) {
     return await this.commands.sessions.revoke(payload.sessionId);
   }
 
-  @MessagePattern({ cmd: 'oauth.genUrl' })
+  @MessagePattern('oauth.genUrl')
   async genUrl(@Payload() payload: { clientId: string; redirectUri: string }) {
     const { clientId, redirectUri } = payload;
     return await this.commands.oauth.oauthGenUrl(clientId, redirectUri);
   }
 
-  @MessagePattern({ cmd: 'oauth.callback' })
+  @MessagePattern('oauth.callback')
   async handleCallback(@Payload() payload: { code: string; state: string }) {
     const { code, state } = payload;
     return await this.commands.oauth.handleCallback(code, state);

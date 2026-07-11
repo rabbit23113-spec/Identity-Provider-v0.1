@@ -60,7 +60,9 @@ import { SessionsQueries } from './queries/sessions.queries';
             clientId: constants.KAFKA_CLIENT_ID,
             brokers: ['kafka:9092'],
           },
-          producerOnlyMode: true,
+          consumer: {
+            groupId: 'auth-consumer-group',
+          },
         },
       },
     ]),

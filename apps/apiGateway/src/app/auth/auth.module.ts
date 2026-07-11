@@ -15,7 +15,9 @@ import { constants } from '../constants/app.constants';
             clientId: constants.KAFKA_CLIENT_ID,
             brokers: ['kafka:9092'],
           },
-          producerOnlyMode: true,
+          consumer: {
+            groupId: 'auth-consumer-group',
+          },
         },
       },
     ]),
