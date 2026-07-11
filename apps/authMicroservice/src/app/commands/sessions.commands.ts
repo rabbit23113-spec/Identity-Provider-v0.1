@@ -33,14 +33,13 @@ export class SessionsCommands {
     private readonly outboxRepository: Repository<OutboxRepository>,
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(UsersCommands) private readonly usersCommands: UsersCommands,
-    @Inject(UsersCommands) private readonly usersQueries: UsersQueries,
+    @Inject(UsersQueries) private readonly usersQueries: UsersQueries,
     @Inject(SessionsQueries) private readonly sessionsQueries: SessionsQueries,
   ) {}
 
   async createSession(): Promise<TokensDto> {
-    const salt = 14;
     const refreshToken: string = randomBytes(32).toString('base64url');
-    const refreshTokenHash: string = await bcrypt.hash(refreshToken, salt);
+    const refreshTokenHash: string = await bcrypt.hash(refreshToken, 7);
     const expiresAt: Date = new Date(Date.now() / 1000 + 60 * 5);
     const session: SessionRepository = this.sessionRepository.create({
       refreshTokenHash,
@@ -65,8 +64,7 @@ export class SessionsCommands {
   async register(dto: CreateSessionDto): Promise<TokensDto> {
     try {
       const { email, password } = dto;
-      const salt = 14;
-      const passwordHash: string = await bcrypt.hash(password, salt);
+      const passwordHash: string = await bcrypt.hash(password, 7);
       await this.usersCommands.createOne({ email, passwordHash });
       return this.createSession();
     } catch (error) {
@@ -106,37 +104,42 @@ export class SessionsCommands {
   }
 
   async rotate(dto: RotateSessionDto): Promise<TokensDto> {
-    const { sessionId, refreshToken } = dto;
-    const session: SessionRepository =
-      await this.sessionsQueries.findOne(sessionId);
-    if (!session) {
-      throw new UnauthorizedException('Invalid credentials');
+    try {
+      const { sessionId, refreshToken } = dto;
+      const session: SessionRepository =
+        await this.sessionsQueries.findOne(sessionId);
+      if (!session) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      if (
+        session.rotatedAt ||
+        session.revokedAt ||
+        session.expiresAt < new Date()
+      ) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      const { refreshTokenHash } = session;
+      const isMatch: boolean = await bcrypt.compare(
+        refreshToken,
+        refreshTokenHash,
+      );
+      if (!isMatch) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      await this.sessionRepository.update(
+        { sessionId },
+        { rotatedAt: new Date() },
+      );
+      const event: OutboxRepository = this.outboxRepository.create({
+        domain: OutboxDomain.SESSION,
+        action: OutboxAction.ROTATE,
+        payload: session,
+      });
+      await this.outboxRepository.save(event);
+      return await this.createSession();
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(error);
     }
-    if (
-      session.rotatedAt ||
-      session.revokedAt ||
-      session.expiresAt < new Date()
-    ) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    const { refreshTokenHash } = session;
-    const isMatch: boolean = await bcrypt.compare(
-      refreshToken,
-      refreshTokenHash,
-    );
-    if (!isMatch) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    await this.sessionRepository.update(
-      { sessionId },
-      { rotatedAt: new Date() },
-    );
-    const event: OutboxRepository = this.outboxRepository.create({
-      domain: OutboxDomain.SESSION,
-      action: OutboxAction.ROTATE,
-      payload: session,
-    });
-    await this.outboxRepository.save(event);
-    return await this.createSession();
   }
 }
