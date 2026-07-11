@@ -1,0 +1,16 @@
+export const example = {
+  GOOGLE_CLIENT_SECRET: '',
+  GOOGLE_CLIENT_ID: '',
+  GOOGLE_REDIRECT_URI: '',
+
+  JWT_SECRET: '',
+
+  POSTGRES_USER: '',
+  POSTGRES_PASSWORD: '',
+  POSTGRES_DB: '',
+
+  KAFKA_CLIENT: '',
+  KAFKA_CLIENT_ID: '',
+
+  REDIS_PROVIDER: '',
+};
