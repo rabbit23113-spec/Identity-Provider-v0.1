@@ -31,7 +31,7 @@ export class AuthService {
 
   async revoke(sessionId: string) {
     return await firstValueFrom(
-      this.clientKafka.send({ cmd: 'auth.revoke' }, { sessionId }),
+      this.clientKafka.emit({ cmd: 'auth.revoke' }, { sessionId }),
     );
   }
 
