@@ -27,8 +27,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class SessionsCommands {
   constructor(
-    @InjectRepository(SessionRepository) private readonly sessionRepository: Repository<SessionRepository>,
-    @InjectRepository(OutboxRepository) private readonly outboxRepository: Repository<OutboxRepository>,
+    @InjectRepository(SessionRepository)
+    private readonly sessionRepository: Repository<SessionRepository>,
+    @InjectRepository(OutboxRepository)
+    private readonly outboxRepository: Repository<OutboxRepository>,
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(UsersCommands) private readonly usersCommands: UsersCommands,
     @Inject(UsersCommands) private readonly usersQueries: UsersQueries,
@@ -51,9 +53,9 @@ export class SessionsCommands {
       payload: session,
     });
     await this.outboxRepository.save(event);
-    const accessToken: string = await this.jwtService.signAsync(
-      session.sessionId,
-    );
+    const accessToken: string = await this.jwtService.signAsync({
+      pub: session.sessionId,
+    });
     return {
       refreshToken,
       accessToken,
