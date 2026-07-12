@@ -1,4 +1,7 @@
-import { OutboxAction, OutboxDomain } from '../../repositories/outbox.repository';
+import {
+  OutboxAction,
+  OutboxDomain,
+} from '../../repositories/outbox.repository';
 
 export class CreateEventDto {
   domain: OutboxDomain;

@@ -6,7 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class SessionsQueries {
   constructor(
-    @InjectRepository(SessionRepository) private readonly sessionRepository: Repository<SessionRepository>,
+    @InjectRepository(SessionRepository)
+    private readonly sessionRepository: Repository<SessionRepository>,
   ) {}
 
   async findOne(sessionId: string): Promise<SessionRepository> {

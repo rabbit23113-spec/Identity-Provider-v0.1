@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/users/createUser.dto';
