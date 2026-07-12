@@ -14,10 +14,7 @@ export enum UserStatus {
 
 @Entity()
 export class UserRepository {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ name: 'user_id', type: 'uuid', default: () => 'gen_random_uuid()' })
+  @PrimaryGeneratedColumn('uuid', { name: 'user_id' })
   userId: string;
 
   @Column({ unique: true })
@@ -26,7 +23,11 @@ export class UserRepository {
   @Column({ name: 'password_hash', nullable: true })
   passwordHash: string;
 
-  @Column({ type: 'simple-enum', enum: UserStatus, default: UserStatus.PENDING })
+  @Column({
+    type: 'simple-enum',
+    enum: UserStatus,
+    default: UserStatus.PENDING,
+  })
   status: UserStatus;
 
   @CreateDateColumn({ name: 'created_at' })

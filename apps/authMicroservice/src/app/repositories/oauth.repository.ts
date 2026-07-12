@@ -7,12 +7,7 @@ import {
 
 @Entity()
 export class OauthRepository {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({
-    name: 'client_id',
-  })
+  @PrimaryGeneratedColumn('uuid', { name: 'client_id' })
   clientId: string;
 
   @Column({ name: 'client_secret_hash' })

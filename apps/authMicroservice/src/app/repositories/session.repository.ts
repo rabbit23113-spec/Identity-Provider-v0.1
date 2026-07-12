@@ -2,13 +2,9 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 
 @Entity()
 export class SessionRepository {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
 
-  @Column({
+  @PrimaryGeneratedColumn('uuid', {
     name: 'session_id',
-    type: 'uuid',
-    default: () => 'gen_random_uuid()',
   })
   sessionId: string;
 
