@@ -4,6 +4,7 @@ import { Queries } from './queries/app.queries';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateSessionDto } from './dto/sessions/createSession.dto';
 import { RotateSessionDto } from './dto/sessions/rotateSession.dto';
+import { CreateClientDto } from './dto/oauth/createClient.dto';
 
 @Controller()
 export class AppController {
@@ -47,5 +48,10 @@ export class AppController {
   async handleCallback(@Payload() payload: { code: string; state: string }) {
     const { code, state } = payload;
     return await this.commands.oauth.handleCallback(code, state);
+  }
+
+  @MessagePattern('oauth.createClient')
+  async createClient(@Payload() payload: { dto: CreateClientDto }) {
+    return await this.commands.oauth.createOauthClient(payload.dto);
   }
 }

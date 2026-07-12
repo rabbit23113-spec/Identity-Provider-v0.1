@@ -5,6 +5,7 @@ import { CreateSessionDto } from '../dto/sessions/createSession.dto';
 import { TokensDto } from '../dto/sessions/tokens.dto';
 import { firstValueFrom } from 'rxjs';
 import { RotateSessionDto } from '../dto/sessions/rotateSession.dto';
+import { CreateClientDto } from '../dto/oauth/createClient.dto';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -49,6 +50,11 @@ export class AuthService implements OnModuleInit {
   async oauthCallback(code: string, state: string) {
     return await firstValueFrom(
       this.clientKafka.send('oauth.callback', { code, state }),
+    );
+  }
+  async oauthCreateClient(dto: CreateClientDto) {
+    return await firstValueFrom(
+      this.clientKafka.send('oauth.createClient', { dto }),
     );
   }
 }

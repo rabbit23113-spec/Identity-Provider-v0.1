@@ -13,6 +13,8 @@ import { CreateSessionDto } from '../dto/sessions/createSession.dto';
 import { TokensDto } from '../dto/sessions/tokens.dto';
 import { ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { RotateSessionDto } from '../dto/sessions/rotateSession.dto';
+import { ClientDto } from '../dto/oauth/client.dto';
+import { CreateClientDto } from '../dto/oauth/createClient.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -41,6 +43,12 @@ export class AuthController {
   @ApiParam({ name: 'sessionId', type: 'string', required: true })
   async revoke(@Param('sessionId') sessionId: string): Promise<void> {
     await this.authService.revoke(sessionId);
+  }
+
+  @Post('oauth/client')
+  @ApiResponse({ example: ClientDto, status: HttpStatus.CREATED })
+  async oauthCreateClient(@Body() body: CreateClientDto): Promise<ClientDto> {
+    return await this.authService.oauthCreateClient(body);
   }
 
   @Get('oauth')
